@@ -25,48 +25,18 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 ## Transcripts
 
 * 0_introducing_back_on_the_broomstick-QChpKRtUzNI-transcript.txt
-* 100th_episode_special_curses_and_cryptids_with_stoned_witches_on_a_broomstick-uDMECq1Om0g-transcript.txt
-* 101_tools_of_the_witch-SB_hyygdskQ-transcript.txt
-* 102_a_witchy_valentines_day_and_sex_magick_conversation-3FKgBwurvW8-transcript.txt
-* 103_being_an_uppity_disobedient_witch_with_judika_illes-HZNm-0oPtjM-transcript.txt
-* 104_tarot_transformation_and_the_cosmic_seed_a_conversation_with_lalania_simone-F0uRvgnu--w-transcript.txt
-* 105_witch_city_usa_-_the_history_hype_and_heart_of_salem_massachusetts-8cY35RrnaBY-transcript.txt
-* 106_gods_goddesses_and_a_bloody_good_moon-L4xEeb8YABE-transcript.txt
-* 108_talking_naturally_modern_witchcraft_with_lacey_burbage-u-31mM3Vljw-transcript.txt
-* 109_sacred_space_conference_-_witches_gone_wild_version-JzansQM9Wp4-transcript.txt
+* 1_are_you_a_good_witch_or_a_bad_witch-pJxQOKNPBK0-transcript.txt
+* 2_rekindling_the_flames_the_art_of_reawakening_your_inner_witch-mhZ3kRJmcnA-transcript.txt
+* 3_casting_circles-GBwCDqTkYs4-transcript.txt
+* 4_swipe_right_for_love_magic_-_is_it_manifestation_or_manipulation-hHvpv22-Nro-transcript.txt
+* 5_february_new_moon_magick-VbGhC0F6kPE-transcript.txt
+* 6_elemental_magic_-_calling_quarters-2j42SFK5flE-transcript.txt
+* 7_witch_con_online_2023_review-EmiW86stRqo-transcript.txt
+* 8_ostara_and_spring_2023-1q4pKZmTs_w-transcript.txt
+* 9_egg_cleanse_divination-vVHjNwn74oU-transcript.txt
 * 10_beltane_musings-T-HCH-xCINA-transcript.txt
-* 110_a_fashionably_late_ostara_celebrating_spring_in_your_own_time-fB7NdfTs8_c-transcript.txt
-* 111_astrology_with_laurie_farrington-p3vFbEV7Lms-transcript.txt
-* 112_the_fires_of_beltane_-_spring_rites_and_royalty-6ffLX9EtHKY-transcript.txt
-* 113_folk_magick_and_witch_trials_-_exploring_alpine_witchery_with_christian_brunner-Xiq4Ja-0hCM-transcript.txt
-* 114_our_top_herbs_for_a_spellcraft_summer-mXsMSvTCT7o-transcript.txt
-* 115_tarot_for_self_reflection_with_natalie_labriola-sFVbtRFfyJM-transcript.txt
-* 116_celebrating_world_tarot_day_and_chelles_birthday-ohKYxr2bmI8-transcript.txt
-* 117_listeners_ask_witches_answer-r7P_Lm68g-E-transcript.txt
-* 118_wise_earth_medicine_with_lalania_simone-6Gdf4SYrwjQ-transcript.txt
-* 119_midsummer_magick_litha_lore_and_the_fair_folk-O-YRgOH5Elg-transcript.txt
 * 11_surviving_mercury_retrograde-hOHUfr5KvHQ-transcript.txt
-* 120_boundary_setting_and_back_off_magic_for_a_stress_free_summer-0gZ3UNdKdwc-transcript.txt
-* 121_spellcrafting_series_part_1_correspondences-sfnWnnEcYzk-transcript.txt
-* 122_spellcrafting_series_part_2_-_how_to_write_a_spell-Yyun-bpukZc-transcript.txt
-* 123_spellcrafting_series_part_3_-_how_to_power_your_spells-ApGMWAbOp8A-transcript.txt
-* 124_live_from_brushwood_sirius_rising_festival_with_the_witches-7EljlokOVoY-transcript.txt
-* 125_lughnasadh_2025_-_sacrifice_is_good_and_all_but_have_you_heard_of_self-care-CAaJ-Bul31M-transcript.txt
-* 126_earth_energy_rooted_in_magick-WTILSkzp6tM-transcript.txt
-* 127_air_energy_-_more_than_inspiration_incense_and_intuition-l7EZVAAveLs-transcript.txt
-* 128_fire_energy_-_a_sacred_spark_of_transformation-Kax6KU9BE7U-transcript.txt
-* 129_water_energy_-_emotion_intuition_and_the_sacred_self-oMrqYzqm7zg-transcript.txt
 * 12_candle_magic-1R913g55KIE-transcript.txt
-* 130_spirit_energy_the_sacred_thread_that_connects_all-M42koItJzFY-transcript.txt
-* 131_the_dark_side_of_autumn_-_a_conversation_with_ness_bosch-gU8ieUK35q0-transcript.txt
-* 132_life_paths_and_cosmic_codes_-_demystifying_numerology-PGteMiva04Y-transcript.txt
-* 133_super_size_season_of_the_witches_answer-bJEhO88oaQA-transcript.txt
-* 134_amateur_ghost_hunting_at_the_haunted_fallbrook_cemetery-QO1xW0rqUu4-transcript.txt
-* 135_samhain_and_celebrating_your_shadow-DWMLdeVcB4A-transcript.txt
-* 136_ghost_stories_green_ladies_and_samhain_plans-oi7A4WxutMs-transcript.txt
-* 137_deity_series_-_the_young_god-NNyVdnQh_NY-transcript.txt
-* 138_deity_series_-_the_horned_god_of_witches_the_fatherwarrior_god-zBPR9aci_U-transcript.txt
-* 139_deity_series_-_the_sage_god-U4ef0QgVUGE-transcript.txt
 * 13_whats_in_a_magical_name-gvh2ZPxLkKQ-transcript.txt
 * 14_cord_cutting_rituals-QJet7ATssDg-transcript.txt
 * 15_is_there_magic_in_ai-M_lw8poKr2o-transcript.txt
@@ -74,12 +44,10 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 17_summer_magic_and_the_forgotten_sabbat-PBYaDKNhnms-transcript.txt
 * 18_herb_magic_-_incenses_potions_and_spells_oh_my-AXn8HuuiIpI-transcript.txt
 * 19_protection_spells_-_have_you_been_cursed-8WWZyElqDAY-transcript.txt
-* 1_are_you_a_good_witch_or_a_bad_witch-pJxQOKNPBK0-transcript.txt
 * 20_pagan_veiling_could_it_work_for_your_practice-Nw7Uqrkab_Q-transcript.txt
 * 20_the_dumas_brothel_stoned_sasquatch_murders-AL8icSwJs-U-transcript.txt
 * 21_instagram_inquiry_navigating_energy_work_and_psychic_abilities-4o9qSH4Bj2g-transcript.txt
 * 21_the_danvers_state_hospital_and_the_keddie_cabin_murders-GA9aQyizeA0-transcript.txt
-* 225_the_super_secret_gavin_episode-yTgvs7vOFYY-transcript.txt
 * 22_magick_of_lammas_the_first_harvest-1R8iuPe3FDc-transcript.txt
 * 22_melon_head_cryptids_the_snake_oil_salesman_serial_killer-fHYov917V2s-transcript.txt
 * 23_back_in_the_broom_closet_conversations_at_a_pagan_festival-eM5SH4bsmaY-transcript.txt
@@ -96,7 +64,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 28_the_kennecott_mines_mccarthy_massacre_and_the_legend_of_the_bell_witch-y-qc9tghdRk-transcript.txt
 * 29_st_augustine_lighthouse_and_the_lemp_family_curse-bAsVJAARBBg-transcript.txt
 * 29_unpacking_a_box_of_magick_-_an_interview_with_jamie_della-pTXe_juAepk-transcript.txt
-* 2_rekindling_the_flames_the_art_of_reawakening_your_inner_witch-mhZ3kRJmcnA-transcript.txt
 * 30_autumn_equinox_and_who_is_mabon_ap_modron-9s48N2tTuP8-transcript.txt
 * 30_dwayyo_vs_snallygaster_and_the_winchester_mystery_house-tGvJxtMbWu0-transcript.txt
 * 31_emilys_bridge_and_the_btk_killer-USn_hs2Byq8-transcript.txt
@@ -117,7 +84,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 38_the_salem_witch_board_museum_and_the_history_of_the_ouija_board-woiuxsPFGGs-transcript.txt
 * 39_gallows_hill_proctors_ledge_faafo_ouija_board_session-cJ4AU6LKLII-transcript.txt
 * 39_spells_gone_wrong-88FbOl4PkvI-transcript.txt
-* 3_casting_circles-GBwCDqTkYs4-transcript.txt
 * 40_the_final_salem_episode-30toc0KpSWg-transcript.txt
 * 40_witches_try_pendulum_and_bone_throwing_divination-refcCc1Zu7s-transcript.txt
 * 41_halloween_hangover_and_the_candy_lady_kidnappings-IlJ0WWmJAuE-transcript.txt
@@ -138,7 +104,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 48_imbolc_spells_and_rituals-5ivEmCaqzWU-transcript.txt
 * 49_daily_witchcraft_-_tarot_and_journaling-iUdMW-fCjxk-transcript.txt
 * 49_ghosts_of_christmas_future-59Lp9vul5RM-transcript.txt
-* 4_swipe_right_for_love_magic_-_is_it_manifestation_or_manipulation-hHvpv22-Nro-transcript.txt
 * 50_grounding_and_centering-VPvwwT_yagY-transcript.txt
 * 50_meet_me_at_the_monte_v_and_successful_psychic_sleuths-giu6ih80sGY-transcript.txt
 * 51_spellwork-_how_to_raise_energy-hqEctQ6boiM-transcript.txt
@@ -159,7 +124,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 58_paranormal_presidential_activity_the_ghost_that_solved_her_own_murder-ourJlFQBn-s-transcript.txt
 * 59_the_witches_answer_more-YTmyCgn-wwI-transcript.txt
 * 59_wtf_justice_served_and_a_tale_of_two_houses-wAwRb0NIgzA-transcript.txt
-* 5_february_new_moon_magick-VbGhC0F6kPE-transcript.txt
 * 60_ghosts_of_belhurst_castle_nycs_house_of_death-EmAsah5q8dA-transcript.txt
 * 60_the_history_of_beltane_and_secrets_of_sex_magick-2GtdhYjuTO4-transcript.txt
 * 61_lady_in_white_fail_a_haunted_pink_house-yP47Nr83AWQ-transcript.txt
@@ -180,7 +144,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 68_litha_stories_spells_rituals_-_myth_of_the_oak_king_holly_king-8xL0-tEfYsI-transcript.txt
 * 69_a_singers_haunted_vajayjay_capt_sparrow_divorces_a_ghost_pirate_and_2_haunted_houses-rvB-HQ3pAis-transcript.txt
 * 69_herbal_conversations_-_from_warding_to_wild_foraging_with_amy_blackthorn-meLf8wzBzJA-transcript.txt
-* 6_elemental_magic_-_calling_quarters-2j42SFK5flE-transcript.txt
 * 70_a_creepy_ouija_request_chelles_birthday_haunting_is_the_cake_a_lie-AVQSeIPxz7Y-transcript.txt
 * 70_norse_paganism-eMpEhEO5o4k-transcript.txt
 * 71_boldt_castle_on_heart_island_lake_morena_campground_hauntings-QphagczCBY4-transcript.txt
@@ -194,7 +157,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 77_witches_answer_your_burning_questions-jzPTbkgu4xY-transcript.txt
 * 78_candle_magick_ii-r84Og35HaVE-transcript.txt
 * 79_friday_the_13th_spells_a_little_mabon_magick_a_fall_equinox_challenge-lGpuRcdm38k-transcript.txt
-* 7_witch_con_online_2023_review-EmiW86stRqo-transcript.txt
 * 80_plant_magic_potent_spells_-_a_witchy_chat_with_amy_blackthorn-wxGm-BT_giY-transcript.txt
 * 81_bring_on_the_season_of_the_witch-o2ua2D6nVoo-transcript.txt
 * 82_ghost_hunting_dos_and_donts_with_psychic_medium_alonnie_phoenix-IDWF7_1im9E-transcript.txt
@@ -205,7 +167,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 87_mother_of_modern_tarot_-_pamela_coleman_smith-yaOJJFMI1Dk-transcript.txt
 * 88_divinations_for_the_dark_half_of_the_year-yuj4b7l7oIk-transcript.txt
 * 89_navigating_grief-6bjS-eBbYg4-transcript.txt
-* 8_ostara_and_spring_2023-1q4pKZmTs_w-transcript.txt
 * 90_gratitude_magick_spells_for_holiday_gatherings-aGX_02wpKsI-transcript.txt
 * 91_tarot_and_manifesting_with_brigit_esselmont_of_biddy_tarot-JcC-5a81ARI-transcript.txt
 * 92yule_magic_solstice_traditions_and_christmas_cryptids-b6PpirbY8Dk-transcript.txt
@@ -216,7 +177,6 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * 97_full_moon_magick_for_solitary_practitioners-vxp_kB4iSRM-transcript.txt
 * 98_tarots_elemental_debate_-_wands_swords_air_and_fire-jC8tcJGhqrY-transcript.txt
 * 99_imbolc_persephone_and_the_power_of_seasonal_magic-7tmZs_hSGto-transcript.txt
-* 9_egg_cleanse_divination-vVHjNwn74oU-transcript.txt
 * air_meditation_-_tranquility_inspiration_and_clarity-rzLYy9oEr2Q-transcript.txt
 * bonus_episode_the_fools_path_a_guided_meditation_ritual-R67lpBgAHrs-transcript.txt
 * bonus_episode_with_jamie_della_ancestors_sisterhood_and_surprises-jeT65y5WE_Q-transcript.txt
@@ -285,11 +245,3 @@ git clone git@github.com:charles-forsyth/botbs-transcript-pipeline.git
 * woty_january_new_moon-VMqQVCr8hm8-transcript.txt
 * woty_january_-_stay_at_home_moon-naQ4wE5dbU8-transcript.txt
 * your_stories_book_1-uon1tgikGsg-transcript.txt
-
-## Contributing
-
-Contributions are welcome! Please feel free to submit a pull request with any corrections or additions.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details.
