@@ -1,216 +1,239 @@
 #!/usr/bin/env python3
+"""Download Back on the Broomstick / Stoned Witches Hour transcripts.
 
+Channel listing uses yt-dlp (no API key). Transcript text comes from
+YouTube captions via youtube-transcript-api by default; --use-whisper
+downloads audio with yt-dlp and transcribes locally, --use-gcs uses
+transcribe_audio.py (Google Cloud Speech).
+"""
+
+import argparse
 import os
 import re
-import argparse
 import subprocess
-from pytubefix import YouTube
-from youtube_transcript_api import YouTubeTranscriptApi
-from googleapiclient.discovery import build
+import sys
+import time
 from datetime import datetime
-from dotenv import load_dotenv
+
+from youtube_transcript_api import YouTubeTranscriptApi
 
 # --- Configuration ---
 
-load_dotenv()
-
 CHANNELS = {
     "botbs": "UCpwXkp5XwIw_WVswz9bzBUw",
-    "swh": "UCyUA6TXPI48F6JLXc6I41xw"
+    "swh": "UCyUA6TXPI48F6JLXc6I41xw",
 }
 GCS_BUCKET = "chuck-transcription-bucket-20251118"
+ID_RE = re.compile(r"-([A-Za-z0-9_-]{11})-transcript\.txt$")
 
 # --- Utility Functions ---
 
+
 def slugify(text):
     """Sanitize text for use in filenames."""
-    text = re.sub(r'[^\w\s-]', '', text)
-    text = re.sub(r'[\s:]+', '_', text)
-    return text.lower().strip('_')
+    text = re.sub(r"[^\w\s-]", "", text)
+    text = re.sub(r"[\s:]+", "_", text)
+    return text.lower().strip("_")
 
-# --- Core YouTube API Functions ---
 
-def get_channel_videos(api_key, channel_id):
-    """Fetches all video IDs from a specified YouTube channel."""
-    print(f"\n{'='*40}")
-    print(f"Fetching videos for channel ID: {channel_id}")
-    youtube = build("youtube", "v3", developerKey=api_key)
-    
+def existing_ids():
+    """Video IDs that already have a transcript file (titles can change, IDs don't)."""
+    ids = set()
+    for f in os.listdir():
+        m = ID_RE.search(f)
+        if m:
+            ids.add(m.group(1))
+    return ids
+
+
+def yt_dlp(*args):
+    return subprocess.run(["yt-dlp", "--no-update", *args], check=True, capture_output=True, text=True)
+
+
+# --- Channel / video metadata ---
+
+
+def get_channel_videos(channel_id):
+    """Return [(video_id, title)] for every upload on the channel, newest first."""
+    print(f"\n{'=' * 40}\nFetching videos for channel ID: {channel_id}")
+    out = yt_dlp(
+        "--flat-playlist",
+        "--print",
+        "%(id)s\t%(title)s",
+        f"https://www.youtube.com/channel/{channel_id}/videos",
+    ).stdout
+    videos = [tuple(line.split("\t", 1)) for line in out.splitlines() if "\t" in line]
+    print(f"Total videos found: {len(videos)}")
+    return videos
+
+
+def get_title(video_id):
+    return yt_dlp("--skip-download", "--print", "%(title)s", f"https://www.youtube.com/watch?v={video_id}").stdout.strip()
+
+
+# --- Transcription methods ---
+
+
+def captions_text(video_id):
+    transcript = YouTubeTranscriptApi().fetch(video_id, languages=["en", "en-US"])
+    return " ".join(s.text for s in transcript.snippets)
+
+
+def whisper_text(video_id):
+    audio = f"{video_id}.mp3"
     try:
-        channel = youtube.channels().list(part="contentDetails", id=channel_id).execute()
-        playlist_id = channel["items"][0]["contentDetails"]["relatedPlaylists"]["uploads"]
-    except Exception as e:
-        print(f"🔴 Error fetching channel info: {str(e)}")
-        return []
+        yt_dlp("-x", "--audio-format", "mp3", "-o", f"{video_id}.%(ext)s", f"https://www.youtube.com/watch?v={video_id}")
+        subprocess.run(["whisper", audio, "--model", "base", "--output_format", "txt"], check=True, capture_output=True)
+        with open(f"{video_id}.txt", encoding="utf-8") as f:
+            return f.read()
+    finally:
+        for ext in ["mp3", "txt", "json", "srt", "tsv", "vtt"]:
+            if os.path.exists(f"{video_id}.{ext}"):
+                os.remove(f"{video_id}.{ext}")
 
-    video_ids = []
-    next_page_token = None
-    while True:
-        try:
-            playlist = youtube.playlistItems().list(
-                part="snippet",
-                playlistId=playlist_id,
-                maxResults=50,
-                pageToken=next_page_token
-            ).execute()
 
-            video_ids.extend([item["snippet"]["resourceId"]["videoId"] for item in playlist["items"]])
-            next_page_token = playlist.get("nextPageToken")
-            if not next_page_token:
-                break
-        except Exception as e:
-            print(f"🔴 Error fetching playlist page: {str(e)}")
-            break
-            
-    print(f"Total videos found: {len(video_ids)}")
-    return video_ids
-
-def download_and_save_transcript(video_id, use_whisper=False, use_api=False, combined_file_handle=None):
-    """
-    Downloads and saves a single transcript.
-    Default method is Google Cloud Speech via transcribe_audio.py.
-    """
+def gcs_text(video_id):
+    audio = f"{video_id}.mp3"
+    out = f"{video_id}.gcs.txt"
     try:
-        yt = YouTube(f"https://youtube.com/watch?v={video_id}")
-        title = slugify(yt.title)
-        filename = f"{title}-{video_id}-transcript.txt"
-        print(f"\nProcessing Video ID: {video_id} - {yt.title}")
+        yt_dlp("-x", "--audio-format", "mp3", "-o", f"{video_id}.%(ext)s", f"https://www.youtube.com/watch?v={video_id}")
+        subprocess.run(
+            [sys.executable, "transcribe_audio.py", audio, "--gcs-bucket", GCS_BUCKET, "--output-file", out],
+            check=True,
+            capture_output=True,
+        )
+        with open(out, encoding="utf-8") as f:
+            return f.read()
+    finally:
+        for p in (audio, out):
+            if os.path.exists(p):
+                os.remove(p)
 
-        if os.path.exists(filename):
-            print(f"🟡 Transcript already exists: {filename}. Skipping.")
+
+METHODS = {"captions": captions_text, "whisper": whisper_text, "gcs": gcs_text}
+
+
+def download_and_save_transcript(video_id, title=None, method="captions", combined_file_handle=None, have=None):
+    """Download and save one transcript. Returns (ok, status)."""
+    try:
+        if have is None:
+            have = existing_ids()
+        if video_id in have:
+            print(f"🟡 Transcript already exists for {video_id}. Skipping.")
             return True, "skipped"
 
-        text = ""
-        # --- Transcription Method Logic ---
-        if use_whisper:
-            method_name = "Whisper"
-            print("🔵 Using local transcription (yt-dlp + whisper)...")
-            audio_filename = f"{video_id}.mp3"
-            
-            subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', '-o', f"{video_id}.%(ext)s", f"https://www.youtube.com/watch?v={video_id}"], check=True, capture_output=True)
-            print(f"🟢 Audio downloaded: {audio_filename}")
-            
-            subprocess.run(['whisper', audio_filename, '--model', 'base', '--output_format', 'txt'], check=True, capture_output=True)
-            print("🟢 Transcription complete.")
+        title = title or get_title(video_id)
+        filename = f"{slugify(title)}-{video_id}-transcript.txt"
+        print(f"\nProcessing {video_id} - {title} [{method}]")
 
-            whisper_output_file = f"{video_id}.txt"
-            with open(whisper_output_file, "r", encoding="utf-8") as f: text = f.read()
-            
-            os.rename(whisper_output_file, filename)
-            for ext in ['mp3', 'json', 'srt', 'tsv', 'vtt']:
-                if os.path.exists(f"{video_id}.{ext}"): os.remove(f"{video_id}.{ext}")
+        text = METHODS[method](video_id)
+        if not text.strip():
+            raise RuntimeError("empty transcript")
+        with open(filename, "w", encoding="utf-8") as f:
+            f.write(text)
+        print(f"🟢 Saved: {filename}")
 
-        elif use_api:
-            method_name = "YouTube API"
-            print("🔵 Downloading transcript via YouTube API...")
-            transcript_object = YouTubeTranscriptApi.get_transcript(video_id)
-            text = " ".join([entry['text'] for entry in transcript_object])
-            with open(filename, "w", encoding="utf-8") as f: f.write(text)
-
-        else: # Default GCS method
-            method_name = "Google Cloud Speech"
-            print("🔵 Using local transcription (yt-dlp + Google Cloud Speech)...")
-            audio_filename = f"{video_id}.mp3"
-
-            subprocess.run(['yt-dlp', '-x', '--audio-format', 'mp3', '-o', f"{video_id}.%(ext)s", f"https://www.youtube.com/watch?v={video_id}"], check=True, capture_output=True)
-            print(f"🟢 Audio downloaded: {audio_filename}")
-            
-            subprocess.run(['python3', 'transcribe_audio.py', audio_filename, '--gcs-bucket', GCS_BUCKET, '--output-file', filename], check=True, capture_output=True)
-            print("🟢 Transcription complete.")
-            
-            with open(filename, "r", encoding="utf-8") as f: text = f.read()
-            os.remove(audio_filename)
-
-        print(f"🟢 Saved transcript via {method_name}: {filename}")
-        if combined_file_handle and text:
+        if combined_file_handle:
             combined_file_handle.write(f"## Transcript File: {filename}\n")
-            combined_file_handle.write(f"## Video Title: {yt.title}\n")
+            combined_file_handle.write(f"## Video Title: {title}\n")
             combined_file_handle.write(f"## Retrieved: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
-            combined_file_handle.write('-'*40 + "\n" + text + "\n\n")
-        
+            combined_file_handle.write("-" * 40 + "\n" + text + "\n\n")
         return True, "new"
 
     except subprocess.CalledProcessError as e:
-        print(f"🔴 Subprocess error for {video_id}: {e.stderr.decode('utf-8') if e.stderr else 'No stderr'}")
-        return False, "error"
+        print(f"🔴 Subprocess error for {video_id}: {(e.stderr or '').strip()[-500:]}")
     except Exception as e:
-        print(f"🔴 Error processing {video_id}: {str(e)}")
-        return False, "error"
+        print(f"🔴 Error processing {video_id}: {type(e).__name__}: {str(e)[:300]}")
+    return False, "error"
+
 
 # --- Main Feature Functions ---
 
-def process_channel(api_key, channel_id, output_file, **kwargs):
-    """Processes all videos from a channel."""
-    video_ids = get_channel_videos(api_key, channel_id)
-    if not video_ids: return
 
-    print(f"\n{'='*40}\nStarting transcript processing for the channel.")
-    stats = {"new": 0, "skipped": 0, "error": 0}
+def process_channel(channel_id, output_file, method, delay):
+    videos = get_channel_videos(channel_id)
+    if not videos:
+        return
+    have = existing_ids()
+    todo = [(v, t) for v, t in videos if v not in have]
+    print(f"Already have {len(videos) - len(todo)}; {len(todo)} to fetch.")
+    stats = {"new": 0, "skipped": len(videos) - len(todo), "error": 0}
+    failed = []
 
     with open(output_file, "a", encoding="utf-8") as combined:
-        for vid in video_ids:
-            success, status = download_and_save_transcript(vid, combined_file_handle=combined, **kwargs)
+        for i, (vid, title) in enumerate(todo):
+            ok, status = download_and_save_transcript(vid, title, method, combined, have)
             stats[status] += 1
-            
-    print(f"\n{'='*40}\nChannel Processing Complete")
-    print(f"Total Videos: {len(video_ids)}, New: {stats['new']}, Skipped: {stats['skipped']}, Errors: {stats['error']}")
+            if not ok:
+                failed.append((vid, title))
+            combined.flush()
+            if delay and i < len(todo) - 1:
+                time.sleep(delay)
+
+    print(f"\n{'=' * 40}\nChannel Processing Complete")
+    print(f"Total Videos: {len(videos)}, New: {stats['new']}, Skipped: {stats['skipped']}, Errors: {stats['error']}")
+    for vid, title in failed:
+        print(f"  failed: {vid} {title}")
+    if failed:
+        print("Retry failures with --use-whisper (or --video-id ID --use-whisper).")
+
 
 def combine_local_files(output_file):
-    """Combines all local transcript files into one."""
-    print(f"🚀 Starting local transcript combination...")
+    print("🚀 Starting local transcript combination...")
     files = [f for f in os.listdir() if f.endswith("-transcript.txt")]
     if not files:
         print("❌ No transcript files found.")
         return
-    
     with open(output_file, "w", encoding="utf-8") as combined:
-        combined.write(f"Combined Transcripts (from local files)\nGenerated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n{'='*40}\n\n")
+        combined.write(
+            f"Combined Transcripts (from local files)\nGenerated on: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n{'=' * 40}\n\n"
+        )
         for filename in sorted(files):
             try:
-                with open(filename, "r", encoding="utf-8") as f: content = f.read()
+                with open(filename, encoding="utf-8") as f:
+                    content = f.read()
                 combined.write(f"## Episode Transcript: {filename}\n{content}\n\n")
             except Exception as e:
-                print(f"❌ Error processing {filename}: {str(e)}")
-    
+                print(f"❌ Error processing {filename}: {e}")
     print(f"\n✅ All local transcripts combined into: {output_file}")
+
 
 # --- Main Execution ---
 
+
 def main():
-    parser = argparse.ArgumentParser(description="A tool to download and manage YouTube video transcripts.", epilog=f"Default transcription method is Google Cloud Speech using bucket '{GCS_BUCKET}'.")
+    parser = argparse.ArgumentParser(
+        description="Download and manage YouTube transcripts for the podcast channels.",
+        epilog="Default method is YouTube captions; no API key needed.",
+    )
     group = parser.add_mutually_exclusive_group(required=True)
-    group.add_argument("--channel", choices=CHANNELS.keys(), help="The friendly name of the channel to process.")
-    group.add_argument("--video-id", help="A single YouTube video ID to download a transcript for.")
+    group.add_argument("--channel", choices=CHANNELS.keys(), help="Channel to process.")
+    group.add_argument("--video-id", help="A single YouTube video ID.")
     group.add_argument("--combine-only", action="store_true", help="Combine all local *-transcript.txt files and exit.")
-    group.add_argument("--list-channels", action="store_true", help="List all pre-configured channels and exit.")
+    group.add_argument("--list-channels", action="store_true", help="List configured channels and exit.")
 
-    parser.add_argument("--api-key", default=os.getenv("YOUTUBE_API_KEY"), help="YouTube Data API key.")
-    parser.add_argument("--output-file", default="master-transcript.txt", help="The name of the combined output file.")
-    
+    parser.add_argument("--output-file", default="master-transcript.txt", help="Combined output file.")
+    parser.add_argument("--delay", type=float, default=2.0, help="Seconds between caption fetches (avoids rate limits).")
     method_group = parser.add_mutually_exclusive_group()
-    method_group.add_argument("--use-whisper", action="store_true", help="Use local yt-dlp and whisper for transcription.")
-    method_group.add_argument("--use-api", action="store_true", help="Use the (unreliable) youtube-transcript-api directly.")
-
+    method_group.add_argument("--use-whisper", action="store_true", help="yt-dlp audio + local whisper.")
+    method_group.add_argument("--use-gcs", action="store_true", help="yt-dlp audio + Google Cloud Speech.")
     args = parser.parse_args()
 
     if args.list_channels:
-        for name, channel_id in CHANNELS.items(): print(f"  - {name}: {channel_id}")
+        for name, channel_id in CHANNELS.items():
+            print(f"  - {name}: {channel_id}")
         return
-
     if args.combine_only:
         combine_local_files(args.output_file)
         return
 
-    if (args.channel or args.video_id) and not args.api_key:
-        parser.error("API key not found in .env file or via --api-key argument.")
-
-    kwargs = {"use_whisper": args.use_whisper, "use_api": args.use_api}
+    method = "whisper" if args.use_whisper else "gcs" if args.use_gcs else "captions"
     if args.channel:
-        process_channel(args.api_key, CHANNELS[args.channel], args.output_file, **kwargs)
-    
+        process_channel(CHANNELS[args.channel], args.output_file, method, args.delay)
     if args.video_id:
-        success, _ = download_and_save_transcript(args.video_id, **kwargs)
-        print(f"\n✅ Single transcript operation {'completed' if success else 'failed'}.")
+        ok, _ = download_and_save_transcript(args.video_id, method=method)
+        print(f"\n✅ Single transcript operation {'completed' if ok else 'failed'}.")
+
 
 if __name__ == "__main__":
     main()

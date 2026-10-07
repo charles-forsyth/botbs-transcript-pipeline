@@ -7,7 +7,7 @@ from datetime import datetime
 
 # Configuration
 CHANNEL_ID = "UCyUA6TXPI48F6JLXc6I41xw"
-API_KEY = "AIzaSyA-MIvoI7M3SlMiskp37Z8tJhOTEsKl1Kk"
+API_KEY = os.environ.get("YOUTUBE_API_KEY")  # set in .env; never hardcode
 COMBINED_FILE = "all-transcripts-swh.txt"
 
 def slugify(text):
