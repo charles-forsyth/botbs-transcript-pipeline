@@ -180,7 +180,12 @@ def process_channel(channel_id, output_file, method, delay):
 
 def combine_local_files(output_file):
     print("🚀 Starting local transcript combination...")
-    files = [f for f in os.listdir() if f.endswith("-transcript.txt")]
+    # the output name ends in "-transcript.txt" too; skip it or the file reads its own half-written self back in
+    files = [
+        f
+        for f in os.listdir()
+        if f.endswith("-transcript.txt") and os.path.abspath(f) != os.path.abspath(output_file)
+    ]
     if not files:
         print("❌ No transcript files found.")
         return
